@@ -19,7 +19,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// ✅ Custom Routes
+// Conventional Routing Configuration
 app.MapControllerRoute(
     name: "about",
     pattern: "about-us",
@@ -39,6 +39,25 @@ app.MapControllerRoute(
     name: "product-details",
     pattern: "products/details/{id}",
     defaults: new { controller = "Home", action = "Index" });
+
+// Adding constraint routes
+app.MapControllerRoute(
+    name: "blog-archive",
+    pattern: "blog/{year:int:min(2020)}/{month:int:range(1,12)}/{day:int:range(1,31)?}",
+    defaults: new { controller = "Blog", action = "Archive" }
+);
+
+app.MapControllerRoute(
+    name: "user-profile",
+    pattern: "user/{username:minlength(3)}/{tab}",
+    defaults: new { controller = "User", action = "Profile" }
+);
+
+app.MapControllerRoute(
+    name: "api-versioned",
+    pattern: "api/v{version:regex(^[0-9]+\\.[0-9]+$)}/{action}",
+    defaults: new { controller = "Api", action = "Version" }
+);
 
 //  Default Route should be last
 app.MapControllerRoute(
